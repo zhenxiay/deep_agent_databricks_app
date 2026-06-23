@@ -1,0 +1,28 @@
+# Equivalent Makefile for the MCP project
+# Variables
+REMOTE_PATH := /Workspace/Users/your-code-path
+APP_NAME := your-app-name
+PROFILE := your-profile # Set this to your Databricks profile name from the Databricks CLI configuration.
+
+# Help command
+.PHONY: help
+help:
+	@echo "Deepagent App - Hosted on Databricks App"
+	@echo ""
+	@echo "Available targets:"
+	@echo "  sync-app-code   - Upload app source code from local to remote databricks workspace"
+	@echo "  deploy-app      - Deploy the app in the remote databricks workspace based on the remote source code"
+	@echo ""
+
+# Upload app source code
+.PHONY: sync-app-code
+sync-app-code:
+	databricks sync . $(REMOTE_PATH) -p $(PROFILE)
+
+# Start the Dash chat UI
+.PHONY: deploy-app
+deploy-app:
+	databricks apps deploy $(APP_NAME) --source-code-path $(REMOTE_PATH) -p $(PROFILE)
+
+# Default target
+.DEFAULT_GOAL := help
